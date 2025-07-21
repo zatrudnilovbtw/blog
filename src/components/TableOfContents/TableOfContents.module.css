@@ -1,0 +1,25 @@
+.tableOfContents {
+  padding: 20px;
+  height: 100%;
+}
+
+.tocList {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.tocItem {
+  padding: 5px 0;
+  cursor: pointer;
+}
+
+.tocItem:hover {
+  text-decoration: underline;
+}
+
+.tocTitle {
+  font-weight: bold;
+  margin-bottom: 15px;
+  font-size: 1.1em;
+}

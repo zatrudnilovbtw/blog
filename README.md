@@ -1,69 +1,80 @@
-# React + TypeScript + Vite
+# BrainT - Блог о Биохакинге
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Технологический стек
+- **Frontend**: React 19, TypeScript
+- **Сборка**: Vite 7
+- **Маршрутизация**: React Router 7
+- **Стилизация**: CSS Modules
+- **UI компоненты**: Radix UI
+- **Иконки**: React Icons
+- **Управление состоянием**: Redux Toolkit (в разработке)
 
-Currently, two official plugins are available:
+## Структура проекта
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### Основные директории
+- **src/** - исходный код приложения
+  - **components/** - многоразовые компоненты интерфейса
+  - **pages/** - компоненты страниц
+  - **utils/** - утилиты и вспомогательные функции
+  - **redux/** - управление состоянием (в разработке)
+- **public/** - статические ресурсы и контент
 
-## Expanding the ESLint configuration
+### Компоненты
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+#### Основные компоненты
+- **App.tsx** - корневой компонент приложения, определяет основную структуру и маршрутизацию
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+#### Компоненты интерфейса
+- **Header** - верхняя панель навигации с логотипом, ссылками и поиском
+- **Navigation** - боковая панель навигации для просмотра категорий статей
+- **ArticleContent** - компонент для отображения содержимого статьи (в разработке)
+- **TableOfContents** - оглавление статьи для быстрой навигации (в разработке)
+- **ThemePopUp** - всплывающее окно для выбора темы оформления (светлая/темная)
+- **SearchPopUp** - компонент поиска по статьям (в разработке)
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+#### Страницы
+- **Home** - главная страница с вводной информацией и последними статьями
+- **Guide** - страница с руководствами, включающая навигацию, содержимое статьи и оглавление
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### Утилиты
+- **fileReader.js** - утилита для чтения файлов статей (в разработке)
+- **sortArticles.js** - утилита для сортировки статей (в разработке)
+
+## Функциональность
+
+### Текущая функциональность
+- Навигация между страницами (главная, руководства)
+- Просмотр категорий статей
+- Переключение между светлой и темной темами (в разработке)
+
+### Планируемая функциональность
+- Полнотекстовый поиск по статьям
+- Фильтрация статей по категориям
+- Управление состоянием через Redux
+- Динамическая загрузка статей из файлов
+- Адаптивный дизайн для мобильных устройств
+
+## Запуск проекта
+
+### Установка зависимостей
+```
+npm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### Запуск в режиме разработки
 ```
+npm run dev
+```
+
+### Сборка для продакшена
+```
+npm run build
+```
+
+### Предварительный просмотр сборки
+```
+npm run preview
+```
+
+## Статус разработки
+Проект находится в активной стадии разработки. Некоторые компоненты и функциональность еще не реализованы полностью.

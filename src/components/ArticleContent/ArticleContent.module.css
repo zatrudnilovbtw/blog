@@ -1,0 +1,10 @@
+.articleContent {
+  padding: 20px;
+  height: 100%;
+  overflow-y: auto;
+}
+
+.article {
+  max-width: 800px;
+  margin: 0 auto;
+}
