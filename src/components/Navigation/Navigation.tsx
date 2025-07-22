@@ -31,7 +31,7 @@ const Navigation = () => {
           ) : (
             Object.entries(groupedArticles).map(([category, categoryArticles]) => (
               <div key={category}>
-                <div className={styles.categoryTitle}>{category}</div>
+                {/* <div className={styles.categoryTitle}>{category}</div> */}
                 <ul className={styles.navigationList}>
                   {categoryArticles.map((article) => (
                     <li key={article.slug} className={styles.navigationItem}>
