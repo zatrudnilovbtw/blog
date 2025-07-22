@@ -31,7 +31,7 @@ const Header = () => {
 
           <Link to="/">
             <div className={styles.logo}>
-            <img src="braint-b.svg" alt="Логотип" />
+            <img src="/braint-b.svg" alt="Логотип" />
             </div>
           </Link>
 

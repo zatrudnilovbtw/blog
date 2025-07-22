@@ -9,87 +9,44 @@
  * CSS: Navigation.module.css
  * Используется в: Guide.tsx
  */
-import styles from './Navigation.module.css'
+import { Link, useParams } from 'react-router-dom';
+import styles from './Navigation.module.css';
 import * as ScrollArea from '@radix-ui/react-scroll-area';
+import { useArticles } from '../../utils/fileReader';
+import { groupArticlesByCategory } from '../../utils/sortArticles';
 
 const Navigation = () => {
-  const peptides = [
-    "Пример",
-    "Пример",
-    "Пример",
-    "Пример",
-    "Пример",
-    "Пример",
-    "Пример",
-    "Пример",
-    "Пример",
-    "Пример",
-    "Пример",
-    "Пример",
-    "Пример",
-    "Пример",
-    "Пример",
-    "Пример",
-    "Пример",
-    "Пример",
-    "Пример",
-    "Пример",
-    "Пример",
-    "Пример",
-    "Пример",
-    "Пример",
-    "Пример",
-    "Пример",
-    "Пример",
-    "Пример",
-    "Пример",
-    "Пример",
-    "Пример",
-    "Пример",
-    "Пример",
-    "Пример",
-    "Пример",
-    "Пример",
-    "Пример",
-    "Пример",
-    "Пример",
-    "Пример",
-    "Пример",
-    "Пример",
-    "Пример",
-    "Пример",
-    "Пример",
-    "Пример",
-    "Пример",
-    "Пример",
-    "Пример",
-    "Пример",
-    "Пример",
-    "Пример",
-    "Пример",
-    "Пример",
-    "Пример",
-    "Пример",
-    "Пример",
-    "Пример",
-    "Пример",
-    "Пример",
-    "Пример", 
-    "Пример",
-  ];
+  const { articleId } = useParams<{ articleId?: string }>();
+  const { articles, loading } = useArticles();
+  
+  // Группируем статьи по категориям
+  const groupedArticles = groupArticlesByCategory(articles);
 
   return (
     <div className={styles.navigation}>
       <ScrollArea.Root className={styles.scrollRoot}>
         <ScrollArea.Viewport className={styles.scrollViewport}>
-          <div className={styles.categoryTitle}>Пример категории</div>
-          <ul className={styles.navigationList}>
-            {peptides.map((peptide, index) => (
-              <li key={index} className={styles.navigationItem}>
-                {peptide}
-              </li>
-            ))}
-          </ul>
+          {loading ? (
+            <div className={styles.loading}>Загрузка...</div>
+          ) : (
+            Object.entries(groupedArticles).map(([category, categoryArticles]) => (
+              <div key={category}>
+                <div className={styles.categoryTitle}>{category}</div>
+                <ul className={styles.navigationList}>
+                  {categoryArticles.map((article) => (
+                    <li key={article.slug} className={styles.navigationItem}>
+                      <Link 
+                        to={`/guide/${article.slug}`} 
+                        className={`${styles.navLink} ${articleId === article.slug ? styles.activeLink : ''}`}
+                      >
+                        {article.title}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))
+          )}
         </ScrollArea.Viewport>
         <ScrollArea.Scrollbar 
           className={styles.scrollbar} 
@@ -99,7 +56,7 @@ const Navigation = () => {
         </ScrollArea.Scrollbar>
       </ScrollArea.Root>
     </div>
-  )
-}
+  );
+};
 
-export default Navigation
+export default Navigation;
