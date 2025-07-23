@@ -1,55 +1,42 @@
 /**
- * ThemePopUp - компонент всплывающего меню выбора темы
+ * ThemeToggle - компонент кнопки переключения темы
  * 
  * Отвечает за:
- * - Отображение опций выбора темы (светлая/темная)
- * - Обработку клика вне компонента для закрытия
- * - Переключение темы оформления
+ * - Отображение иконки текущей темы (солнце/луна)
+ * - Переключение между светлой и темной темой
  * 
  * CSS: ThemePopUp.module.css
  * Используется в: Header.tsx
  */
 import styles from './ThemePopUp.module.css';
-import { useEffect, useRef } from "react";
+import { useEffect, useState } from "react";
 import { GoSun, GoMoon } from 'react-icons/go';
 
-interface ThemePopUpProps {
-    isOpen: boolean;
-    onClose: () => void;
-}
-
-const ThemePopUp = ({ isOpen, onClose }: ThemePopUpProps) => {
-    const popupRef = useRef<HTMLDivElement>(null);
-  
-    const handleClickOutside = (event: MouseEvent) => {
-        if (popupRef.current && !popupRef.current.contains(event.target as Node)) {
-            onClose();
-        }
-    };
+const ThemeToggle = () => {
+    const [theme, setTheme] = useState('light');
 
     useEffect(() => {
-        if (isOpen) {
-            document.addEventListener('mousedown', handleClickOutside);
-        }
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
-        };
-    }, [isOpen, onClose]);
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        setTheme(savedTheme);
+        document.body.className = savedTheme; // Применяем класс к body
+    }, []);
     
-    if (!isOpen) return null;
+    const toggleTheme = () => {
+        const newTheme = theme === 'light' ? 'dark' : 'light';
+        setTheme(newTheme);
+        document.body.className = newTheme; // Меняем класс body
+        localStorage.setItem('theme', newTheme);
+    };
     
     return (
-        <div className={styles.themePopup} ref={popupRef}>
-            <div className={styles.themeOption}>
-                <GoSun />
-                <span>Светлая</span>
-            </div>
-            <div className={styles.themeOption}>
-                <GoMoon />
-                <span>Темная</span>
-            </div>
-        </div>
+        <button 
+            className={styles.themeToggleButton} 
+            onClick={toggleTheme}
+            aria-label={theme === 'light' ? "Переключить на темную тему" : "Переключить на светлую тему"}
+        >
+            {theme === 'light' ? <GoSun className={styles.whitetheme} /> : <GoMoon className={styles.darktheme} />}
+        </button>
     );
 };
 
-export default ThemePopUp;
+export default ThemeToggle;

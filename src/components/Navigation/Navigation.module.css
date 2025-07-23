@@ -46,7 +46,7 @@
 }
 
 .navigationItem {
-  padding: 1px 20px;
+  padding: 5px 20px;
   cursor: pointer;
   color: inherit;
   color: #0c0a09;
@@ -77,11 +77,18 @@
   transition: color 0.2s;
 }
 
-.navLink:hover {
-  color: var(--accent-color, #dc2626);
-}
+
 
 .activeLink {
-  color: var(--accent-color, #dc2626);
+  color: var(--accent-color, #03b300);
   font-weight: 600;
+}
+
+:global(body.dark) .navLink {
+  color: rgb(255, 255, 255);
+}
+
+:global(body.dark) .activeLink {
+  color: var(--accent-color, #08fc00);
+  
 }

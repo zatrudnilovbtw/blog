@@ -3,6 +3,9 @@
   box-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
 }
 
+
+
+
 .container {
   max-width: 1400px;
   margin: 0 auto;
@@ -38,12 +41,12 @@
  
 }
 .link:active{
-  color: #dc2626;
+  color: #03b300;
   font-weight: 600;
 }
 
 .activeLink {
-  color: #dc2626;
+  color: #03b300;
   font-weight: 600;
 }
 
@@ -97,4 +100,17 @@
 .themeButton:hover{
   background-color: #e7e5e4;
 }
+:global(body.dark) .header {
+  background-color: #000000;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.1);
 
+}
+:global(body.dark) .searchContainer input{
+  color: #ffffff;
+  background-color: #000000;
+  border: 1px solid #D4d4d8;
+}
+:global(body.dark) .activeLink {
+  color: #08fc00; 
+  font-weight: 600;
+}

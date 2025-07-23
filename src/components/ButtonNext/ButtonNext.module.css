@@ -1,4 +1,4 @@
-.buttonPrev {
+.buttonNext {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -17,16 +17,30 @@
   margin: 10px 0;
 }
 
-.buttonPrev:hover {
+.buttonNext:hover {
   background-color: #f5f5f4;
 }
 
 .buttonText {
-  margin-left: 10px;
+  margin-right: 10px;
   font-size: 18px;
 }
 
 .buttonIcon {
   font-size: 24px;
   font-weight: bold;
+}
+:global(body.dark) .buttonText {
+  color: #78716c;
+}
+:global(body.dark) .buttonNext{
+  background-color: black;
+}
+:global(body.dark) .buttonIcon{
+  color: #78716c;
+}
+
+
+:global(body.dark) .buttonNext:hover {
+  background-color: #292524;
 }

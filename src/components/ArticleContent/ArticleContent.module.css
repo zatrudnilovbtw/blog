@@ -1,37 +1,17 @@
-/* Исправленный CSS для ArticleContent.module.css */
 .articleContent {
   padding: 2rem;
   max-width: 800px;
   margin: 0 auto;
-  overflow-y: auto; /* Разрешаем прокрутку */
-  -ms-overflow-style: none;  /* IE и Edge */
-  scrollbar-width: none;  /* Firefox */
-}
-
-.articleContent::-webkit-scrollbar {  /* Chrome, Safari, Opera */
-  display: none;
+  min-height: 100vh; /* Обеспечивает прокрутку */
+  position: relative; /* Добавляем для правильного позиционирования CustomBar */
+  padding-top: 0; /* Убираем верхний отступ, чтобы CustomBar был вверху */
 }
 
 .content {
   line-height: 1.7;
   color: var(--text-secondary, #666);
-  overflow-y: auto; /* Разрешаем прокрутку */
-  -ms-overflow-style: none;  /* IE и Edge */
-  scrollbar-width: none;  /* Firefox */
-  padding-bottom: 3rem; /* Дополнительный отступ внизу */
-}
-
-.content::-webkit-scrollbar {  /* Chrome, Safari, Opera */
-  display: none;
-}
-
-* {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-
-*::-webkit-scrollbar {
-  display: none;
+  padding-bottom: 3rem;
+  margin-top: 10px; /* Добавляем отступ сверху для содержимого после CustomBar */
 }
 
 .content h1 {
@@ -44,8 +24,8 @@
   margin: 2rem 0 1rem;
   color: var(--text-primary, #333);
   position: relative;
-  margin-top: 3rem; 
-  padding-top: 2rem; 
+  margin-top: 3rem;
+  padding-top: 2rem;
 }
 
 .content h2::before {
@@ -66,7 +46,8 @@
   margin-bottom: 1.5rem;
 }
 
-.content ul, .content ol {
+.content ul,
+.content ol {
   margin-left: 1.5rem;
   margin-bottom: 1.5rem;
 }
@@ -98,22 +79,23 @@
   border-top: 1px solid #e0e0e0;
   gap: 2rem;
   width: 100%;
-  margin-bottom: 5rem; 
+  margin-bottom: 5rem;
 }
 
 .navigation > :only-child {
   margin-left: auto;
 }
 
-.prevButton, .nextButton {
+.prevButton,
+.nextButton {
   flex: 1;
   max-width: 300px;
   display: flex;
   align-items: stretch;
-  height: 100%;
 }
 
-.prevButton > a, .nextButton > a {
+.prevButton > a,
+.nextButton > a {
   width: 100%;
   height: 100%;
 }
@@ -126,4 +108,17 @@
   margin-left: auto;
 }
 
+:global(body.dark) .content h1,
+:global(body.dark) .content h2,
+:global(body.dark) .content h3,
+:global(body.dark) .content li {
+  color: #ffffff;
+}
 
+:global(body.dark) .content a {
+  color: #08fc00;
+}
+
+:global(body.dark) .content p {
+  color: #d4d4d8;
+}

@@ -31,12 +31,17 @@
     cursor: pointer;
     transition: background-color 0.3s;
 }
+:global(body.dark) .button {
+    background-color: #ffffff;
+    color: black;
+  }
 .button:hover {
     background-color: #444;
 }
 .lastArticles{
     display: flex;
     justify-content: center;
+    align-items: center;
     gap: 20px;
     flex-wrap: wrap;
     max-width: 1200px;
@@ -44,6 +49,7 @@
     padding: 0 20px;
 }
 .article{
+    
     min-width: 300px;
     padding: 20px;
     border: 1px solid #eee;

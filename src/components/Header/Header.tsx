@@ -5,24 +5,42 @@
  * - Отображение логотипа с навигацией на главную страницу
  * - Навигационные ссылки на основные разделы
  * - Поисковую строку для поиска статей
- * - Кнопку переключения темы с выпадающим меню
+ * - Кнопку переключения темы
  * 
  * CSS: Header.module.css
  * Используется в: App.tsx
  */
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import styles from './Header.module.css';
 import { CiSearch } from 'react-icons/ci';
-import { GoSun } from 'react-icons/go';
-import ThemePopUp from '../ThemePopUp/ThemePopUp';
+import ThemeToggle from '../ThemePopUp/ThemePopUp';
 import { Link, NavLink } from 'react-router-dom'
 
 const Header = () => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [currentTheme, setCurrentTheme] = useState('light');
 
-  const togglePopup = () => {
-    setIsOpen(!isOpen);
-  }
+  // Отслеживаем текущую тему
+  useEffect(() => {
+    // Получаем начальную тему
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    setCurrentTheme(savedTheme);
+    
+    // Создаем наблюдатель для отслеживания изменений класса body
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.attributeName === 'class') {
+          const bodyClass = document.body.className;
+          setCurrentTheme(bodyClass);
+        }
+      });
+    });
+    
+    // Начинаем наблюдение за изменениями класса body
+    observer.observe(document.body, { attributes: true });
+    
+    // Очищаем наблюдатель при размонтировании компонента
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <header className={styles.header}>
@@ -31,7 +49,10 @@ const Header = () => {
 
           <Link to="/">
             <div className={styles.logo}>
-            <img src="/braint-b.svg" alt="Логотип" />
+            <img 
+              src={currentTheme === 'dark' ? "/braint-w.svg" : "/braint-b.svg"} 
+              alt="Логотип" 
+            />
             </div>
           </Link>
 
@@ -39,7 +60,7 @@ const Header = () => {
           <NavLink to="/guide" className={({ isActive }) => 
             isActive ? `${styles.link} ${styles.activeLink}` : styles.link
           }>
-            <div>Guides</div>
+            <div className={styles.links}>Guides</div>
           </NavLink>
 
         </div>
@@ -50,16 +71,7 @@ const Header = () => {
             <input type="text" placeholder="Искать статью..." />
           </div>
           <div className={styles.themeButtonContainer}>
-            <button
-              className={styles.themeButton}
-              onClick={togglePopup}
-            >
-              <GoSun />
-            </button>
-            <ThemePopUp
-              onClose={() => setIsOpen(false)}
-              isOpen={isOpen}
-            />
+            <ThemeToggle />
           </div>
         </div>
       </div>

@@ -5,6 +5,7 @@
  * - Отображение текста и медиа-контента статьи
  * - Форматирование содержимого статьи
  * - Загрузку и отображение MDX контента
+ * - Отображение индикатора прогресса прокрутки
  * 
  * CSS: ArticleContent.module.css
  * Используется в: Guide.tsx
@@ -12,8 +13,9 @@
 import { useParams } from 'react-router-dom';
 import styles from './ArticleContent.module.css';
 import { useArticle } from '../../utils/fileReader';
-import ButtonNext from '../../ButtonNext/ButtonNext';
-import ButtonPrev from '../../ButtonPrev/ButtonPrev';
+import ButtonNext from '../../components/ButtonNext/ButtonNext';
+import ButtonPrev from '../../components/ButtonPrev/ButtonPrev';
+import CustomBar from '../../components/CustomBar/CustomBar';
 
 interface RouteParams {
   articleId: string;
@@ -35,9 +37,9 @@ const ArticleContent = () => {
 
   return (
     <div className={styles.articleContent}>
+      <CustomBar />
       <div className={styles.content}>
         <Component />
-        
         <nav className={styles.navigation}>
           <div className={styles.prevButton}>
             <ButtonPrev prevSlug={prevSlug} />
@@ -46,8 +48,6 @@ const ArticleContent = () => {
             <ButtonNext nextSlug={nextSlug} />
           </div>
         </nav>
-        
-        {/* Пустой элемент для дополнительного отступа внизу */}
         <div className={styles.bottomSpacing}></div>
       </div>
     </div>

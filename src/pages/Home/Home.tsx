@@ -4,15 +4,29 @@
  * Отвечает за:
  * - Отображение приветственной информации
  * - Кнопку перехода к руководствам
- * - Отображение последних статей
+ * - Отображение случайных статей
  * 
  * CSS: Home.module.css
  * Используется в: App.tsx (маршрутизация)
  */
+import { useState, useEffect } from 'react'
 import styles from './Home.module.css'
 import { Link } from 'react-router-dom'
+import { useArticles } from '../../utils/fileReader'
+import type { Article } from '../../utils/fileReader'
 
 const Home = () => {
+    const { articles, loading } = useArticles();
+    const [randomArticles, setRandomArticles] = useState<Article[]>([]);
+
+    useEffect(() => {
+        if (articles.length > 0) {
+            // Выбираем 3 случайные статьи
+            const shuffled = [...articles].sort(() => 0.5 - Math.random());
+            setRandomArticles(shuffled.slice(0, 3));
+        }
+    }, [articles]);
+
     return (
         <div>
             <div className={styles.homePage}>
@@ -23,9 +37,23 @@ const Home = () => {
                 </Link>
             </div>
             <div className={styles.lastArticles}>
-                <div className={styles.article}>Основы биохакинга для начинающих</div>
-                <div className={styles.article}>Топ-10 добавок для повышения энергии</div>
-                <div className={styles.article}>Как улучшить когнитивные функции</div>
+                {loading ? (
+                    <p>Загрузка статей...</p>
+                ) : randomArticles.length > 0 ? (
+                    randomArticles.map((article) => (
+                        <Link 
+                            to={`/guide/${article.slug}`} 
+                            key={article.slug}
+                            style={{ textDecoration: 'none', color: 'inherit' }}
+                        >
+                            <div className={styles.article}>
+                                {article.title}
+                            </div>
+                        </Link>
+                    ))
+                ) : (
+                    <p>Нет доступных статей</p>
+                )}
             </div>
         </div>
     )
