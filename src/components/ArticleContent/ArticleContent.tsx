@@ -36,7 +36,7 @@ const ArticleContent = () => {
   const { Component } = article;
 
   return (
-    <div className={styles.articleContent}>
+    <div className={`${styles.articleContent} articleContent`}>
       <CustomBar />
       <div className={styles.content}>
         <Component />

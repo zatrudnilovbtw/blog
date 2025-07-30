@@ -1,6 +1,15 @@
 .tableOfContents {
   padding: 20px;
   height: 100%;
+  width: 250px;
+  position: sticky;
+  top: 20px;
+}
+
+.onThisPage {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 20px;
 }
 
 .tocList {
@@ -10,16 +19,33 @@
 }
 
 .tocItem {
-  padding: 5px 0;
-  cursor: pointer;
+  margin-bottom: 12px;
+  font-size: 14px;
+  line-height: 1.4;
 }
 
-.tocItem:hover {
-  text-decoration: underline;
+.tocLink {
+  color: #666;
+  text-decoration: none;
+  transition: color 0.2s;
+  display: block;
 }
 
-.tocTitle {
-  font-weight: bold;
-  margin-bottom: 15px;
-  font-size: 1.1em;
+
+.activeLink {
+  color: var(--accent-color, #03b300) !important;
+  font-weight: 500;
+}
+
+:global(body.dark) .tocLink {
+  color: #aaa;
+}
+
+:global(body.dark) .activeLink {
+  color: var(--accent-color, #08fc00) !important;
+}
+@media (max-width: 767px){
+  .tableOfContents{
+    display: none;
+  }
 }

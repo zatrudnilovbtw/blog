@@ -114,3 +114,12 @@
   color: #08fc00; 
   font-weight: 600;
 }
+@media (max-width: 767px) {
+  .logo{
+    display: none;
+  } 
+  .links{
+    display: none;
+  }
+  
+}

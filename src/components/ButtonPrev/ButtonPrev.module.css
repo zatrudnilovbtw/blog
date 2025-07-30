@@ -7,7 +7,7 @@
   border: 1px solid #d0d0d0;
   border-radius: 6px;
   text-decoration: none;
-  color: #78716c;
+  color: #78716c  !important;
   font-weight: 600;
   font-size: 12px;
   transition: all 0.2s ease;
@@ -41,4 +41,21 @@
 }
 :global(body.dark) .buttonPrev:hover {
   background-color: #292524;
+}
+@media (max-width: 767px) {
+  .buttonPrev {
+    padding: 6px 10px;      
+    min-width: 60px;        
+    min-height: 30px;       
+    font-size: 10px;       
+  }
+
+  .buttonText {
+    margin-right: 5px;
+    font-size: 12px;        
+  }
+
+  .buttonIcon {
+    font-size: 16px;       
+  }
 }

@@ -1,31 +1,19 @@
-/**
- * Header - компонент верхней панели навигации
- * 
- * Отвечает за:
- * - Отображение логотипа с навигацией на главную страницу
- * - Навигационные ссылки на основные разделы
- * - Поисковую строку для поиска статей
- * - Кнопку переключения темы
- * 
- * CSS: Header.module.css
- * Используется в: App.tsx
- */
+// Header.tsx
 import { useState, useEffect } from 'react';
+import { Link, NavLink } from 'react-router-dom';
 import styles from './Header.module.css';
-import { CiSearch } from 'react-icons/ci';
+import SearchBar from '../SearchBar/SearchBar';
 import ThemeToggle from '../ThemePopUp/ThemePopUp';
-import { Link, NavLink } from 'react-router-dom'
+import BurgerMenu from '../SearchBar/BurgerMenu/BurgerMenu';
 
-const Header = () => {
-  const [currentTheme, setCurrentTheme] = useState('light');
+export default function Header() {
+  const [currentTheme, setCurrentTheme] = useState<string>('light');
+  const [isMenuOpen, setIsMenuOpen] = useState(false); // Состояние для бургер-меню
 
-  // Отслеживаем текущую тему
   useEffect(() => {
-    // Получаем начальную тему
     const savedTheme = localStorage.getItem('theme') || 'light';
     setCurrentTheme(savedTheme);
-    
-    // Создаем наблюдатель для отслеживания изменений класса body
+
     const observer = new MutationObserver((mutations) => {
       mutations.forEach((mutation) => {
         if (mutation.attributeName === 'class') {
@@ -34,42 +22,39 @@ const Header = () => {
         }
       });
     });
-    
-    // Начинаем наблюдение за изменениями класса body
+
     observer.observe(document.body, { attributes: true });
-    
-    // Очищаем наблюдатель при размонтировании компонента
     return () => observer.disconnect();
   }, []);
+
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
 
   return (
     <header className={styles.header}>
       <div className={styles.container}>
         <div className={styles.left}>
-
+        <BurgerMenu isOpen={isMenuOpen} onToggle={toggleMenu} />
           <Link to="/">
             <div className={styles.logo}>
-            <img 
-              src={currentTheme === 'dark' ? "/braint-w.svg" : "/braint-b.svg"} 
-              alt="Логотип" 
-            />
+              <img
+                src={currentTheme === 'dark' ? '/braint-w.svg' : '/braint-b.svg'}
+                alt="Логотип"
+              />
             </div>
           </Link>
-
-
-          <NavLink to="/guide" className={({ isActive }) => 
-            isActive ? `${styles.link} ${styles.activeLink}` : styles.link
-          }>
+          <NavLink
+            to="/guide"
+            className={({ isActive }) =>
+              isActive ? `${styles.link} ${styles.activeLink}` : styles.link
+            }
+          >
             <div className={styles.links}>Guides</div>
           </NavLink>
-
         </div>
-
         <div className={styles.right}>
-          <div className={styles.searchContainer}>
-            <CiSearch className={styles.searchIcon} />
-            <input type="text" placeholder="Искать статью..." />
-          </div>
+          <SearchBar />
           <div className={styles.themeButtonContainer}>
             <ThemeToggle />
           </div>
@@ -77,6 +62,4 @@ const Header = () => {
       </div>
     </header>
   );
-};
-
-export default Header;
+}

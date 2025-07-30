@@ -1,4 +1,3 @@
-// vite.config.ts
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import mdx from '@mdx-js/rollup';
@@ -12,9 +11,21 @@ export default defineConfig({
     mdx({
       remarkPlugins: [
         remarkFrontmatter,
-        [remarkMdxFrontmatter, { name: 'frontMatter' }]
+        [remarkMdxFrontmatter, { name: 'frontMatter' }],
       ],
-      rehypePlugins: [rehypeHighlight]
-    })
-  ]
+      rehypePlugins: [rehypeHighlight],
+    }),
+  ],
+  server: {
+    proxy: {
+      '/api': {
+        target: 'http://localhost:3002',
+        changeOrigin: true,
+      },
+      '/articles': {
+        target: 'http://localhost:3002',
+        changeOrigin: true,
+      },
+    },
+  },
 });

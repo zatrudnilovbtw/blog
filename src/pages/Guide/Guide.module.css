@@ -35,3 +35,22 @@
     flex: 1;
     overflow: hidden;
 }
+@media (max-width: 767px) {
+  .nav {
+    display: none !important;
+  }
+  
+  .guidePage {
+    padding: 0;
+    max-width: 100%;
+  }
+  
+  .mainSection {
+    flex: 1;
+    width: 100%;
+  }
+  
+  .table {
+    display: none;
+  }
+}

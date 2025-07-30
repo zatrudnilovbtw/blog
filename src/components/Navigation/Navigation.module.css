@@ -1,13 +1,47 @@
 .navigation {
-  width: 250px;
-  padding: 20px 10px;
+  width: 300px; /* Увеличиваем ширину для алфавита */
+  padding: 20px 0;
   height: 100%;
   overflow: hidden;
   position: relative;
+  display: flex;
+}
+
+.alphabetNav {
+  width: 40px; /* Ширина панели алфавита */
+  padding: 10px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow-y: auto; /* Прокрутка, если букв много */
+  margin-right: 15px; /* Увеличиваем расстояние между алфавитом и статьями */
+
+}
+
+.alphabetButton {
+  width: 30px;
+  height: 20px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 12px;
+  text-align: center;
+  color: #333;
+  transition: color 0.2s;
+  margin-bottom: 5px;
+}
+
+.alphabetButton:hover {
+  color: var(--accent-color, #03b300);
+}
+
+.alphabetButton:disabled {
+  color: #ccc;
+  cursor: not-allowed;
 }
 
 .scrollRoot {
-  width: 100%;
+  width: calc(100% - 40px - 15px); /* Учитываем ширину алфавита и отступ */
   height: 100%;
   overflow: hidden;
 }
@@ -27,7 +61,6 @@
   right: 0;
   bottom: 0;
   margin-top: 25px;
- 
 }
 
 .scrollThumb {
@@ -35,35 +68,22 @@
   background-color: #c1c1c1;
   border-radius: 2px;
   position: relative;
- 
-  
 }
 
 .navigationList {
   list-style-type: none;
   padding-top: 3px;
   margin: 0;
+  padding-left: 0;
 }
 
 .navigationItem {
-  padding: 5px 20px;
+  padding: 3px 0;
   cursor: pointer;
-  color: inherit;
   color: #0c0a09;
-  font-size: 18px;
+  font-size: 16px;
+  line-height: 1.5;
 }
-
-/* 
-.categoryTitle {
-  font-weight: bold;
-  padding: 10px 20px;
-  color: #78716c;
-  font-size: 12px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  margin-top: 25px;
- 
-} */
 
 .loading {
   padding: 1rem;
@@ -75,9 +95,12 @@
   text-decoration: none;
   color: var(--text-primary, #333);
   transition: color 0.2s;
+  display: block;
+  padding: 0 20px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
-
-
 
 .activeLink {
   color: var(--accent-color, #03b300);
@@ -90,5 +113,11 @@
 
 :global(body.dark) .activeLink {
   color: var(--accent-color, #08fc00);
+}
+
+@media(max-width: 767px){
+  .alphabetNav{
+    display: none;
+  }
   
 }

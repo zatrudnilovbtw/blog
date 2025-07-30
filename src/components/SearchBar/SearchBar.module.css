@@ -1,0 +1,73 @@
+/* SearchBar.module.css */
+.searchContainer {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  .searchContainer:focus{
+    outline: none;
+}
+  
+  .searchIcon {
+    position: absolute;
+    left: 10px;
+    color: var(--muted-color, #666);
+  }
+  
+  .searchContainer input {
+    padding: 8px 8px 8px 35px;
+    border: 1px solid var(--border-color, #ddd);
+    border-radius: 4px;
+    width: 200px;
+    font-size: 14px;
+  }
+  
+  .searchResults {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: var(--background-color, #fff);
+    border: 1px solid var(--border-color, #ddd);
+    border-radius: 4px;
+    max-height: 300px;
+    overflow-y: auto;
+    z-index: 1000;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .searchResultItem {
+    display: block;
+    padding: 10px;
+    text-decoration: none;
+    color: var(--text-color, #333);
+    border-bottom: 1px solid var(--border-color, #eee);
+  }
+  
+  
+  .resultTitle {
+    font-weight: bold;
+    font-size: 16px;
+  }
+  
+  
+  :global(body.dark) .searchContainer input{
+    color: #ffffff;
+    background-color: #000000;
+    border: 1px solid #D4d4d8;
+  }
+
+  :global(body.dark) .searchResults  {
+    background-color: #000000;
+
+  }
+
+  :global(body.dark) .resultTitle {
+    color: #ffffff;
+  }
+
+  :global(body.dark) .searchResultItem {
+    color: #ffffff;
+  }
+
+ 
