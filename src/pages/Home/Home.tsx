@@ -15,7 +15,7 @@ import { Link } from 'react-router-dom'
 import { useArticles } from '../../utils/fileReader'
 import type { Article } from '../../utils/fileReader'
 
-const Home = () => {
+export default  function Home  ()  {
     const { articles, loading } = useArticles();
     const [randomArticles, setRandomArticles] = useState<Article[]>([]);
 
@@ -59,4 +59,3 @@ const Home = () => {
     )
 }
 
-export default Home

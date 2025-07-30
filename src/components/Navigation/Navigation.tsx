@@ -10,31 +10,46 @@
  * CSS: Navigation.module.css
  * Используется в: Guide.tsx
  */
+
 import { Link, useParams } from 'react-router-dom';
 import styles from './Navigation.module.css';
 import * as ScrollArea from '@radix-ui/react-scroll-area';
 import { useArticles } from '../../utils/fileReader';
 import { groupArticlesByCategory } from '../../utils/sortArticles';
+import { useRef } from 'react';
 
-const Navigation = () => {
+interface NavigationProps {
+  onLinkClick?: () => void;
+}
+
+const Navigation = ({ onLinkClick }: NavigationProps) => {
   const { articleId } = useParams<{ articleId?: string }>();
   const { articles, loading } = useArticles();
   
   const groupedArticles = groupArticlesByCategory(articles);
 
-const alphabet = Array.from({ length: 32 }, (_, i) => String.fromCharCode(0x0410 + i));
+  // ✅ создаём ref для ScrollArea.Viewport
+  const viewportRef = useRef<HTMLDivElement>(null);
+
+  const alphabet = Array.from({ length: 32 }, (_, i) => String.fromCharCode(0x0410 + i));
+
   const scrollToLetter = (letter: string) => {
-    const scrollViewport = document.querySelector(`.${styles.scrollViewport}`);
+    const scrollViewport = viewportRef.current;
     if (!scrollViewport) return;
 
-    const firstArticleWithLetter = scrollViewport.querySelector(`[data-letter="${letter.toLowerCase()}"]`);
+    // ищем первую статью на нужную букву
+    const firstArticleWithLetter = scrollViewport.querySelector(
+      `[data-letter="${letter.toLowerCase()}"]`
+    ) as HTMLElement | null;
+
     if (firstArticleWithLetter) {
-      const offsetTop = firstArticleWithLetter.getBoundingClientRect().top - scrollViewport.getBoundingClientRect().top;
+      // ✅ offsetTop работает относительно viewport
       scrollViewport.scrollTo({
-        top: offsetTop,
+        top: firstArticleWithLetter.offsetTop,
         behavior: 'smooth',
       });
     } else {
+      // если нет статей на эту букву – ищем дальше
       const nextLetterIndex = alphabet.indexOf(letter) + 1;
       if (nextLetterIndex < alphabet.length) {
         scrollToLetter(alphabet[nextLetterIndex]);
@@ -58,7 +73,8 @@ const alphabet = Array.from({ length: 32 }, (_, i) => String.fromCharCode(0x0410
       </div>
 
       <ScrollArea.Root className={styles.scrollRoot}>
-        <ScrollArea.Viewport className={styles.scrollViewport}>
+        {/* ✅ подключаем ref */}
+        <ScrollArea.Viewport ref={viewportRef} className={styles.scrollViewport}>
           {loading ? (
             <div className={styles.loading}>Загрузка...</div>
           ) : (
@@ -75,7 +91,10 @@ const alphabet = Array.from({ length: 32 }, (_, i) => String.fromCharCode(0x0410
                       >
                         <Link
                           to={`/guide/${article.slug}`}
-                          className={`${styles.navLink} ${articleId === article.slug ? styles.activeLink : ''}`}
+                          className={`${styles.navLink} ${
+                            articleId === article.slug ? styles.activeLink : ''
+                          }`}
+                          onClick={onLinkClick}
                         >
                           {article.title}
                         </Link>

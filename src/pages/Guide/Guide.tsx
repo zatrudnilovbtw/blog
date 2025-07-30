@@ -35,7 +35,7 @@ const Guide = () => {
 
   return (
     <div className={styles.guidePage}>
-        <div className={styles.nav}><Navigation/></div>
+        <div className={styles.nav}><Navigation onLinkClick={undefined} /></div>
         <div className={styles.mainSection}><ArticleContent/></div>
         <div className={styles.table}><TableOfContents/></div>
     </div>

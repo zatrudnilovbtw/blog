@@ -1,130 +1,168 @@
 .burgerButton {
-    display: none;
-    font-size: 24px;
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: #666;
-    padding: 0.5rem;
+  display: none;
+  font-size: 24px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #666;
+  padding: 0.5rem;
+}
+
+.closeButton {
+  display: none;
+  font-size: 24px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #666;
+  padding: 1rem;
+}
+
+.burgerMenu {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 300px;
+  background: #fff;
+  transform: translateX(-100%);
+  transition: transform 0.3s ease;
+  z-index: 9;
+  padding-left: 1rem;
+  overflow-y: auto;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  backdrop-filter: blur(6px);
+  background: rgba(0, 0, 0, 0.3);
+  z-index: 8;
+}
+
+.burgerMenuOpen {
+  transform: translateX(0);
+}
+
+.burgerMenuOpen::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 300px;
+  width: calc(100% - 300px);
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: -1;
+}
+
+.headerSection {
+  position: sticky;
+  top: 0;
+  background: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #ccc;
+  z-index: 10;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+}
+
+.logo img {
+  width: 85px;
+  height: auto;
+}
+
+.linkWrapper {
+  margin-left: 16px;
+}
+
+.contentSection {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem 0 1rem 1rem;
+}
+
+.guideLink {
+  color: #666;
+  font-size: 16px;
+  font-weight: 500;
+  text-decoration: none;
+  margin-left: 0;
+}
+
+.guideLink:hover {
+  color: var(--accent-color, #03b300);
+}
+
+.activeLink {
+  color: var(--accent-color, #03b300) !important;
+  font-weight: 600;
+}
+
+:global(body.dark) .burgerButton {
+  color: #fff;
+}
+
+:global(body.dark) .closeButton {
+  color: #fff;
+}
+
+:global(body.dark) .burgerMenu {
+  background: #000000;
+  box-shadow: 2px 0 5px rgba(255, 255, 255, 0.2);
+}
+
+:global(body.dark) .guideLink {
+  color: #fff;
+}
+
+:global(body.dark) .guideLink:hover {
+  color: var(--accent-color, #08fc00);
+}
+
+:global(body.dark) .activeLink {
+  color: var(--accent-color, #08fc00) !important;
+  font-weight: 600;
+}
+
+:global(body.dark) .burgerMenuOpen::after {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+:global(body.dark) .headerSection {
+  border-bottom: 1px solid #333;
+  background-color: #000000;
+}
+
+@media (max-width: 767px) {
+  .burgerButton {
+    display: block;
   }
-  
+
   .closeButton {
-    display: none;
-    font-size: 24px;
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: #666;
-    padding: 0.5rem;
+    display: block;
   }
-  
+
   .burgerMenu {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 300px;
-    background: #fff;
-    transform: translateX(-100%);
-    transition: transform 0.3s ease;
-    z-index: 9;
-    padding: 1rem;
-    overflow-y: auto;
-    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+    display: block;
   }
-  
-  .burgerMenuOpen {
-    transform: translateX(0);
-  }
-  
-  .burgerMenuOpen::after {
-    content: '';
-    position: fixed;
-    top: 0;
-    left: 300px;
-    width: calc(100% - 300px);
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: -1;
-  }
-  
-  .headerSection {
-    display: flex;
-    justify-content: space-between; /* Распределяет элементы: лого слева, кнопка справа */
-    align-items: center;
-    padding: 0.5rem;
-    border-bottom: 1px solid #ccc;
-  }
-  
-  .logo {
-    display: flex;
-    align-items: center;
-  }
-  
-  .logo img {
-    width: 85px;
-    height: auto;
-  }
-  
+
   .contentSection {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    padding: 1rem 0 1rem 1rem; /* Добавляем отступ слева */
+    padding: 1rem 0 1rem 0.5rem;
   }
-  
+
   .guideLink {
-    color: #666;
-    font-size: 16px;
-    font-weight: 500;
-    text-decoration: none;
-    margin-left: 0; /* Убираем margin-left, так как отступ уже есть в .contentSection */
+    margin-left: 0;
+    padding: 0.5rem 0;
   }
-  
-  .guideLink:hover {
-    color: var(--accent-color, #03b300);
-  }
-  
-  :global(body.dark) .burgerButton {
-    color: #fff;
-  }
-  
-  :global(body.dark) .closeButton {
-    color: #fff;
-  }
-  
-  :global(body.dark) .burgerMenu {
-    background: #000000;
-    box-shadow: 2px 0 5px rgba(255, 255, 255, 0.2);
-  }
-  
-  :global(body.dark) .guideLink {
-    color: #fff;
-  }
-  
-  :global(body.dark) .guideLink:hover {
-    color: var(--accent-color, #08fc00);
-  }
-  
-  :global(body.dark) .burgerMenuOpen::after {
-    background: rgba(0, 0, 0, 0.3);
-  }
-  
-  :global(body.dark) .headerSection {
-    border-bottom: 1px solid #333;
-  }
-  
-  @media (max-width: 767px) {
-    .burgerButton {
-      display: block;
-    }
-  
-    .closeButton {
-      display: block;
-    }
-  
-    .burgerMenu {
-      display: block;
-    }
-  }
+}
