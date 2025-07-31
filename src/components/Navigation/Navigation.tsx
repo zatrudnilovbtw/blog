@@ -15,7 +15,7 @@ import { Link, useParams } from 'react-router-dom';
 import styles from './Navigation.module.css';
 import * as ScrollArea from '@radix-ui/react-scroll-area';
 import { useArticles } from '../../utils/fileReader';
-import { groupArticlesByCategory } from '../../utils/sortArticles';
+import { sortArticlesByAlphabet } from '../../utils/sortArticles';
 import { useRef } from 'react';
 
 interface NavigationProps {
@@ -26,9 +26,9 @@ const Navigation = ({ onLinkClick }: NavigationProps) => {
   const { articleId } = useParams<{ articleId?: string }>();
   const { articles, loading } = useArticles();
   
-  const groupedArticles = groupArticlesByCategory(articles);
+  // Сортируем статьи: сначала русские, потом английские
+  const sortedArticles = sortArticlesByAlphabet(articles);
 
-  // ✅ создаём ref для ScrollArea.Viewport
   const viewportRef = useRef<HTMLDivElement>(null);
 
   const alphabet = Array.from({ length: 32 }, (_, i) => String.fromCharCode(0x0410 + i));
@@ -37,19 +37,16 @@ const Navigation = ({ onLinkClick }: NavigationProps) => {
     const scrollViewport = viewportRef.current;
     if (!scrollViewport) return;
 
-    // ищем первую статью на нужную букву
     const firstArticleWithLetter = scrollViewport.querySelector(
       `[data-letter="${letter.toLowerCase()}"]`
     ) as HTMLElement | null;
 
     if (firstArticleWithLetter) {
-      // ✅ offsetTop работает относительно viewport
       scrollViewport.scrollTo({
         top: firstArticleWithLetter.offsetTop,
         behavior: 'smooth',
       });
     } else {
-      // если нет статей на эту букву – ищем дальше
       const nextLetterIndex = alphabet.indexOf(letter) + 1;
       if (nextLetterIndex < alphabet.length) {
         scrollToLetter(alphabet[nextLetterIndex]);
@@ -73,37 +70,32 @@ const Navigation = ({ onLinkClick }: NavigationProps) => {
       </div>
 
       <ScrollArea.Root className={styles.scrollRoot}>
-        {/* ✅ подключаем ref */}
         <ScrollArea.Viewport ref={viewportRef} className={styles.scrollViewport}>
           {loading ? (
             <div className={styles.loading}>Загрузка...</div>
           ) : (
-            Object.entries(groupedArticles).map(([category, categoryArticles]) => (
-              <div key={category}>
-                <ul className={styles.navigationList}>
-                  {categoryArticles.map((article) => {
-                    const firstLetter = article.title.charAt(0).toUpperCase();
-                    return (
-                      <li
-                        key={article.slug}
-                        className={styles.navigationItem}
-                        data-letter={firstLetter.toLowerCase()}
-                      >
-                        <Link
-                          to={`/guide/${article.slug}`}
-                          className={`${styles.navLink} ${
-                            articleId === article.slug ? styles.activeLink : ''
-                          }`}
-                          onClick={onLinkClick}
-                        >
-                          {article.title}
-                        </Link>
-                      </li>
-                    );
-                  })}
-                </ul>
-              </div>
-            ))
+            <ul className={styles.navigationList}>
+              {sortedArticles.map((article) => {
+                const firstLetter = article.title.charAt(0).toUpperCase();
+                return (
+                  <li
+                    key={article.slug}
+                    className={styles.navigationItem}
+                    data-letter={firstLetter.toLowerCase()}
+                  >
+                    <Link
+                      to={`/guide/${article.slug}`}
+                      className={`${styles.navLink} ${
+                        articleId === article.slug ? styles.activeLink : ''
+                      }`}
+                      onClick={onLinkClick}
+                    >
+                      {article.title}
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
           )}
         </ScrollArea.Viewport>
         <ScrollArea.Scrollbar
