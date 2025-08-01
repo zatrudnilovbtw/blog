@@ -10,7 +10,11 @@ const port = 3002;
 const searchCache = new NodeCache({ stdTTL: 600 });
 
 // Разрешаем запросы с фронтенда
+<<<<<<< HEAD
+app.use(cors({ origin: 'http://31.129.98.20:3002' })); // Замени на домен позже
+=======
 app.use(cors({ origin: 'http://31.129.98.20:3002' })); // Обнови для домена позже
+>>>>>>> 306420bc5c8ecd613bd6ba38d19863fddd608b9c
 
 // Логируем все запросы
 app.use((req, res, next) => {
