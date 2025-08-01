@@ -11,6 +11,7 @@
  * Используется в: Guide.tsx
  */
 import { useParams } from 'react-router-dom';
+import { useEffect } from 'react';
 import styles from './ArticleContent.module.css';
 import { useArticle } from '../../utils/fileReader';
 import ButtonNext from '../../components/ButtonNext/ButtonNext';
@@ -24,6 +25,14 @@ interface RouteParams {
 const ArticleContent = () => {
   const { articleId } = useParams<keyof RouteParams>();
   const { article, loading, error, prevSlug, nextSlug } = useArticle(articleId);
+
+  // Сбрасываем позицию прокрутки при смене статьи
+  useEffect(() => {
+    const mainSection = document.querySelector('[class*="mainSection"]') as HTMLElement;
+    if (mainSection) {
+      mainSection.scrollTop = 0;
+    }
+  }, [articleId]);
 
   if (loading) {
     return <div className={styles.loading}>Загрузка статьи...</div>;

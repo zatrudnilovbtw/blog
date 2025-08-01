@@ -54,6 +54,18 @@ const Navigation = ({ onLinkClick }: NavigationProps) => {
     }
   };
 
+  // Функция для сброса прокрутки при клике на ссылку
+  const handleLinkClick = () => {
+    const mainSection = document.querySelector('[class*="mainSection"]') as HTMLElement;
+    if (mainSection) {
+      mainSection.scrollTop = 0;
+    }
+    // Вызываем дополнительный обработчик, если он передан
+    if (onLinkClick) {
+      onLinkClick();
+    }
+  };
+
   return (
     <div className={styles.navigation}>
       {/* Алфавитная навигация слева */}
@@ -88,7 +100,7 @@ const Navigation = ({ onLinkClick }: NavigationProps) => {
                       className={`${styles.navLink} ${
                         articleId === article.slug ? styles.activeLink : ''
                       }`}
-                      onClick={onLinkClick}
+                      onClick={handleLinkClick}
                     >
                       {article.title}
                     </Link>

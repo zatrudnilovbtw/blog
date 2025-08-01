@@ -33,6 +33,19 @@ const Guide = () => {
     }
   }, [articleId, articles, loading, navigate])
 
+  // Дополнительный сброс прокрутки при смене статьи
+  useEffect(() => {
+    if (articleId) {
+      const mainSection = document.querySelector('[class*="mainSection"]') as HTMLElement;
+      if (mainSection) {
+        // Используем setTimeout для гарантии того, что DOM обновился
+        setTimeout(() => {
+          mainSection.scrollTop = 0;
+        }, 0);
+      }
+    }
+  }, [articleId]);
+
   return (
     <div className={styles.guidePage}>
         <div className={styles.nav}><Navigation onLinkClick={undefined} /></div>
