@@ -9,8 +9,8 @@ const app = express();
 const port = 3002;
 const searchCache = new NodeCache({ stdTTL: 600 });
 
-// Разрешаем запросы с фронтенда (Vite)
-app.use(cors({ origin: 'http://localhost:5173' }));
+// Разрешаем запросы с фронтенда
+app.use(cors({ origin: 'http://31.129.98.20:3002' })); // Обнови для домена позже
 
 // Логируем все запросы
 app.use((req, res, next) => {
@@ -71,7 +71,7 @@ const loadArticles = async () => {
 // 🔍 API поиска
 app.get('/api/search', async (req, res) => {
   const query = req.query.q?.toLowerCase() || '';
-  const limit = 5; // Фиксированный лимит
+  const limit = 5;
   const cacheKey = `search:${query}:${limit}`;
   console.log(`Поисковый запрос: q=${query}, limit=${limit}`);
 
@@ -100,9 +100,18 @@ app.get('/api/search', async (req, res) => {
   }
 });
 
+// Fallback для React Router
+app.get('*', (req, res) => {
+  // Исключаем API маршруты
+  if (req.path.startsWith('/api/')) {
+    return res.status(404).send('Not found');
+  }
+  res.sendFile(path.join(__dirname, '../public/index.html'));
+});
+
 // 🚀 Запускаем сервер
-const server = app.listen(port, () => {
-  console.log(`✅ Сервер запущен: http://localhost:${port}`);
+const server = app.listen(port, '0.0.0.0', () => {
+  console.log(`✅ Сервер запущен: http://0.0.0.0:${port}`);
 });
 
 // Обработка ошибок

@@ -9,10 +9,12 @@
  * Используется в: ArticleContent.tsx
  */
 import { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import styles from './CustomBar.module.css';
 
 const CustomBar = () => {
   const [scrollProgress, setScrollProgress] = useState(0);
+  const { articleId } = useParams<{ articleId?: string }>();
 
   useEffect(() => {
     // Получаем родительский элемент, который имеет прокрутку
@@ -42,7 +44,7 @@ const CustomBar = () => {
     return () => {
       parentElement.removeEventListener('scroll', handleScroll);
     };
-  }, []);
+  }, [articleId]); // Добавляем articleId в зависимости, чтобы пересоздавать обработчик при смене статьи
 
   return (
     <div className={styles.progressContainer}>
