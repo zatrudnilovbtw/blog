@@ -51,6 +51,7 @@ const Guide = () => {
         <div className={styles.nav}><Navigation onLinkClick={undefined} /></div>
         <div className={styles.mainSection}><ArticleContent/></div>
         <div className={styles.table}><TableOfContents/></div>
+        <div></div>
     </div>
   )
 }
