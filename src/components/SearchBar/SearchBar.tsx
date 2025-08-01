@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import { CiSearch } from 'react-icons/ci';
 import styles from './SearchBar.module.css';
 
-// Тип для данных статьи, возвращаемых сервером
 interface Article {
   id: string;
   title: string;

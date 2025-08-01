@@ -9,25 +9,17 @@ const app = express();
 const port = 3002;
 const searchCache = new NodeCache({ stdTTL: 600 });
 
-// Разрешаем запросы с фронтенда
-<<<<<<< HEAD
-app.use(cors({ origin: 'http://31.129.98.20:3002' })); // Замени на домен позже
-=======
-app.use(cors({ origin: 'http://31.129.98.20:3002' })); // Обнови для домена позже
->>>>>>> 306420bc5c8ecd613bd6ba38d19863fddd608b9c
+app.use(cors({ origin: 'https://braint.ru' }));
 
-// Логируем все запросы
 app.use((req, res, next) => {
   console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
   next();
 });
 
-// Отдаём статику из public
 app.use(express.static(path.join(__dirname, '../public')));
 
 let articlesCache = null;
 
-// Загружаем статьи
 const loadArticles = async () => {
   if (articlesCache) {
     console.log('Использован кэш метаданных статей');
@@ -72,7 +64,6 @@ const loadArticles = async () => {
   }
 };
 
-// 🔍 API поиска
 app.get('/api/search', async (req, res) => {
   const query = req.query.q?.toLowerCase() || '';
   const limit = 5;
@@ -104,21 +95,17 @@ app.get('/api/search', async (req, res) => {
   }
 });
 
-// Fallback для React Router
 app.get('*', (req, res) => {
-  // Исключаем API маршруты
   if (req.path.startsWith('/api/')) {
     return res.status(404).send('Not found');
   }
   res.sendFile(path.join(__dirname, '../public/index.html'));
 });
 
-// 🚀 Запускаем сервер
 const server = app.listen(port, '0.0.0.0', () => {
   console.log(`✅ Сервер запущен: http://0.0.0.0:${port}`);
 });
 
-// Обработка ошибок
 server.on('error', (error) => {
   console.error('Ошибка запуска сервера:', error.message);
   if (error.code === 'EADDRINUSE') {

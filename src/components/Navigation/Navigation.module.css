@@ -1,5 +1,5 @@
 .navigation {
-  width: 300px; /* Увеличиваем ширину для алфавита */
+  width: 300px; 
   padding: 20px 0;
   height: 100%;
   overflow: hidden;
@@ -8,13 +8,13 @@
 }
 
 .alphabetNav {
-  width: 40px; /* Ширина панели алфавита */
+  width: 40px; 
   padding: 10px 0;
   display: flex;
   flex-direction: column;
   align-items: center;
-  overflow-y: auto; /* Прокрутка, если букв много */
-  margin-right: 15px; /* Увеличиваем расстояние между алфавитом и статьями */
+  overflow-y: auto; 
+  margin-right: 15px; 
 
 }
 
@@ -41,7 +41,7 @@
 }
 
 .scrollRoot {
-  width: calc(100% - 40px - 15px); /* Учитываем ширину алфавита и отступ */
+  width: calc(100% - 40px - 15px); 
   height: 100%;
   overflow: hidden;
 }

@@ -18,13 +18,13 @@ const ThemeToggle = () => {
     useEffect(() => {
         const savedTheme = localStorage.getItem('theme') || 'light';
         setTheme(savedTheme);
-        document.body.className = savedTheme; // Применяем класс к body
+        document.body.className = savedTheme; 
     }, []);
     
     const toggleTheme = () => {
         const newTheme = theme === 'light' ? 'dark' : 'light';
         setTheme(newTheme);
-        document.body.className = newTheme; // Меняем класс body
+        document.body.className = newTheme; 
         localStorage.setItem('theme', newTheme);
     };
     

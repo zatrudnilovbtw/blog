@@ -24,21 +24,17 @@ const Guide = () => {
   const { articles, loading } = useArticles()
   const navigate = useNavigate()
 
-  // Если нет выбранной статьи, перенаправляем на первую статью в списке
   useEffect(() => {
     if (!articleId && !loading && articles.length > 0) {
-      // Сортируем статьи по алфавиту и берем первую
       const sortedArticles = sortArticlesByAlphabet(articles)
       navigate(`/guide/${sortedArticles[0].slug}`, { replace: true })
     }
   }, [articleId, articles, loading, navigate])
 
-  // Дополнительный сброс прокрутки при смене статьи
   useEffect(() => {
     if (articleId) {
       const mainSection = document.querySelector('[class*="mainSection"]') as HTMLElement;
       if (mainSection) {
-        // Используем setTimeout для гарантии того, что DOM обновился
         setTimeout(() => {
           mainSection.scrollTop = 0;
         }, 0);

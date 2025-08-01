@@ -17,7 +17,6 @@ const CustomBar = () => {
   const { articleId } = useParams<{ articleId?: string }>();
 
   useEffect(() => {
-    // Получаем родительский элемент, который имеет прокрутку
     const parentElement = document.querySelector('[class*="mainSection"]');
     
     if (!parentElement) {
@@ -26,7 +25,6 @@ const CustomBar = () => {
     }
     
     const handleScroll = () => {
-      // Вычисляем прогресс прокрутки
       const scrollPosition = parentElement.scrollTop;
       const scrollHeight = parentElement.scrollHeight - parentElement.clientHeight;
       const scrollPercentage = (scrollPosition / scrollHeight) * 100;
@@ -34,17 +32,14 @@ const CustomBar = () => {
       setScrollProgress(Math.min(100, Math.max(0, scrollPercentage)));
     };
     
-    // Добавляем обработчик события прокрутки
     parentElement.addEventListener('scroll', handleScroll);
     
-    // Вызываем обработчик сразу для установки начального значения
     handleScroll();
     
-    // Удаляем обработчик при размонтировании компонента
     return () => {
       parentElement.removeEventListener('scroll', handleScroll);
     };
-  }, [articleId]); // Добавляем articleId в зависимости, чтобы пересоздавать обработчик при смене статьи
+  }, [articleId]); 
 
   return (
     <div className={styles.progressContainer}>

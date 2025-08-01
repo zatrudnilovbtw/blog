@@ -21,7 +21,6 @@ export default  function Home  ()  {
 
     useEffect(() => {
         if (articles.length > 0) {
-            // Выбираем 3 случайные статьи
             const shuffled = [...articles].sort(() => 0.5 - Math.random());
             setRandomArticles(shuffled.slice(0, 3));
         }

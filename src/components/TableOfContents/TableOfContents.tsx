@@ -26,7 +26,6 @@ const TableOfContents = () => {
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const headingObserverRef = useRef<IntersectionObserver | null>(null);
 
-  // Функция для сбора всех h2 заголовков
   const getHeadings = () => {
     const articleContent = document.querySelector('.articleContent');
     if (!articleContent) return [];
@@ -35,7 +34,6 @@ const TableOfContents = () => {
     const headingItems: TocItem[] = [];
 
     headingElements.forEach((heading, index) => {
-      // Создаем id для заголовка, если его нет
       if (!heading.id) {
         heading.id = `heading-${index}`;
       }
@@ -49,54 +47,44 @@ const TableOfContents = () => {
     return headingItems;
   };
 
-  // Обновление оглавления
   const updateTableOfContents = () => {
-    // Очищаем предыдущий таймер, если он есть
     if (timerRef.current) {
       clearTimeout(timerRef.current);
     }
 
-    // Устанавливаем новый таймер для обновления оглавления
     timerRef.current = setTimeout(() => {
       const items = getHeadings();
       setHeadings(items);
       
-      // Если есть заголовки, устанавливаем первый как активный по умолчанию
       if (items.length > 0) {
         setActiveId(items[0].id);
       }
     }, 10);
   };
 
-  // Настройка наблюдателя за видимостью заголовков
   useEffect(() => {
     if (headings.length === 0) return;
 
-    // Отключаем предыдущий наблюдатель, если он есть
     if (headingObserverRef.current) {
       headingObserverRef.current.disconnect();
     }
 
-    // Создаем новый наблюдатель за видимостью заголовков
     const observer = new IntersectionObserver(
       (entries) => {
-        // Получаем все видимые заголовки
         const visibleHeadings = entries
           .filter(entry => entry.isIntersecting)
           .map(entry => entry.target.id);
 
         if (visibleHeadings.length > 0) {
-          // Берем первый видимый заголовок как активный
           setActiveId(visibleHeadings[0]);
         }
       },
       {
-        rootMargin: '-80px 0px -80% 0px', // Смещение для определения видимой области
-        threshold: 0.1 // Порог видимости элемента
+        rootMargin: '-80px 0px -80% 0px', 
+        threshold: 0.1 
       }
     );
 
-    // Наблюдаем за всеми заголовками
     headings.forEach(heading => {
       const element = document.getElementById(heading.id);
       if (element) {
@@ -104,7 +92,6 @@ const TableOfContents = () => {
       }
     });
 
-    // Сохраняем наблюдатель для последующего отключения
     headingObserverRef.current = observer;
 
     return () => {
@@ -114,31 +101,24 @@ const TableOfContents = () => {
     };
   }, [headings]);
 
-  // Обновляем оглавление при изменении статьи
   useEffect(() => {
-    // Сбрасываем состояние при смене статьи
     setHeadings([]);
     setActiveId('');
 
-    // Отключаем предыдущий observer, если он есть
     if (observerRef.current) {
       observerRef.current.disconnect();
     }
 
-    // Отключаем наблюдатель за заголовками
     if (headingObserverRef.current) {
       headingObserverRef.current.disconnect();
     }
 
-    // Создаем новый observer для отслеживания изменений в DOM
     const observer = new MutationObserver(() => {
       updateTableOfContents();
     });
 
-    // Запускаем первоначальное обновление оглавления
     updateTableOfContents();
 
-    // Начинаем наблюдение за изменениями в контенте статьи
     setTimeout(() => {
       const articleContent = document.querySelector('.articleContent');
       if (articleContent) {
@@ -152,7 +132,7 @@ const TableOfContents = () => {
     }, 300);
 
     return () => {
-      // Очищаем ресурсы при размонтировании
+      
       if (observerRef.current) {
         observerRef.current.disconnect();
       }
@@ -163,33 +143,27 @@ const TableOfContents = () => {
         headingObserverRef.current.disconnect();
       }
     };
-  }, [articleId]); // Зависимость от articleId для обновления при смене статьи
+  }, [articleId]); 
 
-  // Функция для прокрутки к заголовку с учетом фиксированного верхнего бара
   const scrollToHeading = (id: string) => {
     const element = document.getElementById(id);
     if (element) {
-      // Получаем родительский элемент с прокруткой
+      
       const scrollContainer = document.querySelector('[class*="mainSection"]');
       if (scrollContainer) {
-        // Получаем высоту CustomBar (примерно 5px) и добавляем отступ для лучшего UX
-        const offset = 60; // Отступ в пикселях от верха
+        const offset = 60; 
         
-        // Вычисляем позицию элемента относительно контейнера прокрутки
         const elementPosition = element.getBoundingClientRect().top;
         const containerPosition = scrollContainer.getBoundingClientRect().top;
         const relativePosition = elementPosition - containerPosition;
         
-        // Прокручиваем контейнер к элементу с учетом отступа
         scrollContainer.scrollBy({
           top: relativePosition - offset,
           behavior: 'smooth'
         });
         
-        // Устанавливаем активный заголовок
         setActiveId(id);
       } else {
-        // Запасной вариант, если не найден контейнер прокрутки
         element.scrollIntoView({ behavior: 'smooth', block: 'start' });
         setActiveId(id);
       }

@@ -26,7 +26,6 @@ const ArticleContent = () => {
   const { articleId } = useParams<keyof RouteParams>();
   const { article, loading, error, prevSlug, nextSlug } = useArticle(articleId);
 
-  // Сбрасываем позицию прокрутки при смене статьи
   useEffect(() => {
     const mainSection = document.querySelector('[class*="mainSection"]') as HTMLElement;
     if (mainSection) {

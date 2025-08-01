@@ -26,7 +26,6 @@ const Navigation = ({ onLinkClick }: NavigationProps) => {
   const { articleId } = useParams<{ articleId?: string }>();
   const { articles, loading } = useArticles();
   
-  // Сортируем статьи: сначала русские, потом английские
   const sortedArticles = sortArticlesByAlphabet(articles);
 
   const viewportRef = useRef<HTMLDivElement>(null);
@@ -54,13 +53,11 @@ const Navigation = ({ onLinkClick }: NavigationProps) => {
     }
   };
 
-  // Функция для сброса прокрутки при клике на ссылку
   const handleLinkClick = () => {
     const mainSection = document.querySelector('[class*="mainSection"]') as HTMLElement;
     if (mainSection) {
       mainSection.scrollTop = 0;
     }
-    // Вызываем дополнительный обработчик, если он передан
     if (onLinkClick) {
       onLinkClick();
     }
