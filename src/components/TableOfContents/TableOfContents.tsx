@@ -28,7 +28,9 @@ const TableOfContents = () => {
 
   const getHeadings = () => {
     const articleContent = document.querySelector('.articleContent');
-    if (!articleContent) return [];
+    if (!articleContent) {
+      return [];
+    }
     
     const headingElements = articleContent.querySelectorAll('h2');
     const headingItems: TocItem[] = [];
@@ -38,10 +40,13 @@ const TableOfContents = () => {
         heading.id = `heading-${index}`;
       }
 
-      headingItems.push({
-        id: heading.id,
-        text: heading.textContent || `Раздел ${index + 1}`
-      });
+      const text = heading.textContent?.trim();
+      if (text) {
+        headingItems.push({
+          id: heading.id,
+          text: text
+        });
+      }
     });
 
     return headingItems;
@@ -59,7 +64,7 @@ const TableOfContents = () => {
       if (items.length > 0) {
         setActiveId(items[0].id);
       }
-    }, 10);
+    }, 100);
   };
 
   useEffect(() => {
@@ -113,11 +118,27 @@ const TableOfContents = () => {
       headingObserverRef.current.disconnect();
     }
 
-    const observer = new MutationObserver(() => {
+    // Создаем несколько проверок для надежности
+    const checkForHeadings = () => {
       updateTableOfContents();
-    });
+    };
 
-    updateTableOfContents();
+    // Немедленная проверка
+    checkForHeadings();
+
+    // Проверки через разные интервалы
+    const timeouts = [
+      setTimeout(checkForHeadings, 100),
+      setTimeout(checkForHeadings, 300),
+      setTimeout(checkForHeadings, 500),
+      setTimeout(checkForHeadings, 1000),
+      setTimeout(checkForHeadings, 2000)
+    ];
+
+    // MutationObserver для отслеживания изменений DOM
+    const observer = new MutationObserver(() => {
+      checkForHeadings();
+    });
 
     setTimeout(() => {
       const articleContent = document.querySelector('.articleContent');
@@ -129,9 +150,18 @@ const TableOfContents = () => {
         });
         observerRef.current = observer;
       }
-    }, 300);
+    }, 100);
+
+    // Слушаем кастомное событие от ArticleContent
+    const handleContentUpdate = () => {
+      setTimeout(checkForHeadings, 50);
+    };
+
+    document.addEventListener('articleContentUpdated', handleContentUpdate);
 
     return () => {
+      // Очищаем все таймауты
+      timeouts.forEach(timeout => clearTimeout(timeout));
       
       if (observerRef.current) {
         observerRef.current.disconnect();
@@ -142,13 +172,14 @@ const TableOfContents = () => {
       if (headingObserverRef.current) {
         headingObserverRef.current.disconnect();
       }
+      
+      document.removeEventListener('articleContentUpdated', handleContentUpdate);
     };
   }, [articleId]); 
 
   const scrollToHeading = (id: string) => {
     const element = document.getElementById(id);
     if (element) {
-      
       const scrollContainer = document.querySelector('[class*="mainSection"]');
       if (scrollContainer) {
         const offset = 60; 

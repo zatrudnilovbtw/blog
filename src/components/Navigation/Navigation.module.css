@@ -85,11 +85,7 @@
   line-height: 1.5;
 }
 
-.loading {
-  padding: 1rem;
-  text-align: center;
-  color: var(--text-secondary, #666);
-}
+
 
 .navLink {
   text-decoration: none;

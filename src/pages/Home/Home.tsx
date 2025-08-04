@@ -12,8 +12,9 @@
 import { useState, useEffect } from 'react'
 import styles from './Home.module.css'
 import { Link } from 'react-router-dom'
-import { useArticles } from '../../utils/fileReader'
+import { useArticles, preloadArticle } from '../../utils/fileReader'
 import type { Article } from '../../utils/fileReader'
+import Loader from '../../components/Loader/Loader'
 
 export default  function Home  ()  {
     const { articles, loading } = useArticles();
@@ -37,13 +38,14 @@ export default  function Home  ()  {
             </div>
             <div className={styles.lastArticles}>
                 {loading ? (
-                    <p>Загрузка статей...</p>
+                    <Loader size="medium" text="Загрузка статей..." showText={false} />
                 ) : randomArticles.length > 0 ? (
                     randomArticles.map((article) => (
                         <Link 
                             to={`/guide/${article.slug}`} 
                             key={article.slug}
                             style={{ textDecoration: 'none', color: 'inherit' }}
+                            onMouseEnter={() => preloadArticle(article.slug)}
                         >
                             <div className={styles.article}>
                                 {article.title}

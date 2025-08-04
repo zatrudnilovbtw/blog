@@ -62,11 +62,9 @@
   color: var(--text-tertiary, #888);
 }
 
-.loading {
-  padding: 2rem;
-  text-align: center;
-  color: var(--text-secondary, #666);
-}
+
+
+
 
 .error {
   padding: 2rem;

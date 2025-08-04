@@ -12,11 +12,17 @@
  */
 import { useParams } from 'react-router-dom';
 import { useEffect } from 'react';
+import ReactMarkdown from 'react-markdown';
+import remarkFrontmatter from 'remark-frontmatter';
+import remarkGfm from 'remark-gfm';
+import rehypeHighlight from 'rehype-highlight';
+import 'highlight.js/styles/github.css'; // Стили для подсветки кода
 import styles from './ArticleContent.module.css';
 import { useArticle } from '../../utils/fileReader';
 import ButtonNext from '../../components/ButtonNext/ButtonNext';
 import ButtonPrev from '../../components/ButtonPrev/ButtonPrev';
 import CustomBar from '../../components/CustomBar/CustomBar';
+import Loader from '../Loader/Loader';
 
 interface RouteParams {
   articleId: string;
@@ -33,21 +39,65 @@ const ArticleContent = () => {
     }
   }, [articleId]);
 
+  // Уведомляем TableOfContents об изменении контента
+  useEffect(() => {
+    if (article) {
+      // Множественные уведомления для надежности
+      const timers = [
+        setTimeout(() => {
+          const event = new CustomEvent('articleContentUpdated');
+          document.dispatchEvent(event);
+        }, 100),
+        setTimeout(() => {
+          const event = new CustomEvent('articleContentUpdated');
+          document.dispatchEvent(event);
+        }, 300),
+        setTimeout(() => {
+          const event = new CustomEvent('articleContentUpdated');
+          document.dispatchEvent(event);
+        }, 600)
+      ];
+      
+      return () => timers.forEach(timer => clearTimeout(timer));
+    }
+  }, [article, articleId]); // Добавляем articleId как зависимость
+
   if (loading) {
-    return <div className={styles.loading}>Загрузка статьи...</div>;
+    return (
+      <div className={`${styles.articleContent} articleContent`}>
+        <CustomBar />
+        <Loader size="large" text="Загрузка статьи..." />
+      </div>
+    );
   }
 
   if (error || !article) {
     return <div className={styles.error}>{error || 'Статья не найдена'}</div>;
   }
 
-  const { Component } = article;
-
   return (
     <div className={`${styles.articleContent} articleContent`}>
       <CustomBar />
       <div className={styles.content}>
-        <Component />
+        <ReactMarkdown
+          remarkPlugins={[remarkFrontmatter, remarkGfm]}
+          rehypePlugins={[rehypeHighlight]}
+          components={{
+            h2: ({ children, ...props }) => {
+              // Создаем стабильный ID на основе текста заголовка
+              const text = Array.isArray(children) ? children.join('') : String(children);
+              const id = `heading-${text.toLowerCase().replace(/[^a-zа-я0-9]/gi, '-').replace(/-+/g, '-').replace(/^-|-$/g, '')}`;
+              return <h2 id={id} {...props}>{children}</h2>;
+            },
+            h3: ({ children, ...props }) => {
+              const text = Array.isArray(children) ? children.join('') : String(children);
+              const id = `heading-${text.toLowerCase().replace(/[^a-zа-я0-9]/gi, '-').replace(/-+/g, '-').replace(/^-|-$/g, '')}`;
+              return <h3 id={id} {...props}>{children}</h3>;
+            },
+          }}
+        >
+          {article.content}
+        </ReactMarkdown>
         <nav className={styles.navigation}>
           <div className={styles.prevButton}>
             <ButtonPrev prevSlug={prevSlug} />

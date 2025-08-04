@@ -1,0 +1,140 @@
+.loaderContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 2rem;
+  min-height: 200px;
+}
+
+.spinner {
+  position: relative;
+  display: inline-block;
+}
+
+.spinner.small {
+  width: 24px;
+  height: 24px;
+}
+
+.spinner.medium {
+  width: 40px;
+  height: 40px;
+}
+
+.spinner.large {
+  width: 60px;
+  height: 60px;
+}
+
+.spinnerRing {
+  position: absolute;
+  border: 2px solid transparent;
+  border-radius: 50%;
+  animation: spin 1.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
+}
+
+.small .spinnerRing {
+  border-width: 2px;
+}
+
+.medium .spinnerRing {
+  border-width: 3px;
+}
+
+.large .spinnerRing {
+  border-width: 4px;
+}
+
+.spinnerRing:nth-child(1) {
+  width: 100%;
+  height: 100%;
+  border-top-color: #03b300;
+  animation-delay: 0s;
+}
+
+.spinnerRing:nth-child(2) {
+  width: 80%;
+  height: 80%;
+  top: 10%;
+  left: 10%;
+  border-top-color: #05d905;
+  animation-delay: -0.4s;
+  animation-direction: reverse;
+}
+
+.spinnerRing:nth-child(3) {
+  width: 60%;
+  height: 60%;
+  top: 20%;
+  left: 20%;
+  border-top-color: #08fc00;
+  animation-delay: -0.8s;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.loaderText {
+  margin-top: 1.5rem;
+  font-size: 16px;
+  color: var(--text-secondary, #666);
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* Темная тема */
+:global(body.dark) .spinnerRing:nth-child(1) {
+  border-top-color: #08fc00;
+}
+
+:global(body.dark) .spinnerRing:nth-child(2) {
+  border-top-color: #05d905;
+}
+
+:global(body.dark) .spinnerRing:nth-child(3) {
+  border-top-color: #03b300;
+}
+
+:global(body.dark) .loaderText {
+  color: #d4d4d8;
+}
+
+/* Адаптивность */
+@media (max-width: 767px) {
+  .loaderContainer {
+    padding: 2rem 1rem;
+    min-height: 150px;
+  }
+  
+  .spinner.large {
+    width: 50px;
+    height: 50px;
+  }
+  
+  .spinner.medium {
+    width: 35px;
+    height: 35px;
+  }
+  
+  .loaderText {
+    font-size: 14px;
+    margin-top: 1rem;
+  }
+}

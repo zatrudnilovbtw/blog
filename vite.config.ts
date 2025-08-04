@@ -28,4 +28,17 @@ export default defineConfig({
       },
     },
   },
+  build: {
+    outDir: 'dist',
+    assetsDir: 'assets',
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['react', 'react-dom', 'react-router-dom'],
+          ui: ['@radix-ui/themes', '@radix-ui/react-scroll-area'],
+        },
+      },
+    },
+  },
+  base: './',
 });

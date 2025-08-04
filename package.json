@@ -5,10 +5,14 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:server": "cd server && npm start",
     "build": "tsc -b && vite build",
+    "build:server": "cd server && npm install --production",
     "lint": "eslint .",
     "preview": "vite preview",
-    "start": "node server.js"
+    "start": "cd server && node server.js",
+    "start:prod": "NODE_ENV=production cd server && node server.js",
+    "postbuild": "npm run build:server"
   },
   "dependencies": {
     "@mdx-js/react": "^3.1.0",
@@ -21,14 +25,17 @@
     "express": "^5.1.0",
     "front-matter": "^4.0.2",
     "gray-matter": "^4.0.3",
+    "highlight.js": "^11.11.1",
     "next-mdx-remote": "^5.0.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-icons": "^5.5.0",
+    "react-markdown": "^10.1.0",
     "react-redux": "^9.2.0",
     "react-router-dom": "^7.7.0",
     "rehype-highlight": "^7.0.2",
     "remark-frontmatter": "^5.0.0",
+    "remark-gfm": "^4.0.1",
     "remark-mdx-frontmatter": "^5.2.0",
     "tailwindcss": "^4.1.11",
     "use-debounce": "^10.0.5"

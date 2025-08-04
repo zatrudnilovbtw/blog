@@ -14,9 +14,10 @@
 import { Link, useParams } from 'react-router-dom';
 import styles from './Navigation.module.css';
 import * as ScrollArea from '@radix-ui/react-scroll-area';
-import { useArticles } from '../../utils/fileReader';
+import { useArticles, preloadArticle } from '../../utils/fileReader';
 import { sortArticlesByAlphabet } from '../../utils/sortArticles';
 import { useRef } from 'react';
+import Loader from '../Loader/Loader';
 
 interface NavigationProps {
   onLinkClick?: () => void;
@@ -81,7 +82,7 @@ const Navigation = ({ onLinkClick }: NavigationProps) => {
       <ScrollArea.Root className={styles.scrollRoot}>
         <ScrollArea.Viewport ref={viewportRef} className={styles.scrollViewport}>
           {loading ? (
-            <div className={styles.loading}>Загрузка...</div>
+            <Loader size="medium" text="Загрузка статей..." />
           ) : (
             <ul className={styles.navigationList}>
               {sortedArticles.map((article) => {
@@ -98,6 +99,7 @@ const Navigation = ({ onLinkClick }: NavigationProps) => {
                         articleId === article.slug ? styles.activeLink : ''
                       }`}
                       onClick={handleLinkClick}
+                      onMouseEnter={() => preloadArticle(article.slug)}
                     >
                       {article.title}
                     </Link>
