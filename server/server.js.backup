@@ -189,17 +189,6 @@ app.get('/api/search', async (req, res) => {
   }
 });
 
-
-// Health check endpoint
-app.get('/api/health', (req, res) => {
-  res.json({ 
-    status: 'ok', 
-    environment: NODE_ENV,
-    timestamp: new Date().toISOString(),
-    uptime: process.uptime()
-  });
-});
-
 app.get('*', (req, res) => {
   if (req.path.startsWith('/api/')) {
     return res.status(404).json({ error: 'API endpoint not found' });
@@ -213,7 +202,15 @@ app.get('*', (req, res) => {
   res.sendFile(indexPath);
 });
 
-
+// Health check endpoint
+app.get('/api/health', (req, res) => {
+  res.json({ 
+    status: 'ok', 
+    environment: NODE_ENV,
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime()
+  });
+});
 
 const server = app.listen(PORT, '0.0.0.0', () => {
   console.log(`✅ Сервер запущен: http://0.0.0.0:${PORT}`);
