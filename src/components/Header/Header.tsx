@@ -50,7 +50,7 @@ export default function Header() {
               isActive ? `${styles.link} ${styles.activeLink}` : styles.link
             }
           >
-            <div className={styles.links}>Guides</div>
+            <div className={styles.links}>Гайды</div>
           </NavLink>
         </div>
         <div className={styles.right}>

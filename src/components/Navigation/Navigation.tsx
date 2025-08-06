@@ -47,9 +47,17 @@ const Navigation = ({ onLinkClick }: NavigationProps) => {
         behavior: 'smooth',
       });
     } else {
+      // Исправляем: добавляем проверку чтобы избежать бесконечной рекурсии
       const nextLetterIndex = alphabet.indexOf(letter) + 1;
       if (nextLetterIndex < alphabet.length) {
-        scrollToLetter(alphabet[nextLetterIndex]);
+        // Добавляем небольшую задержку чтобы избежать проблем с прокруткой
+        setTimeout(() => scrollToLetter(alphabet[nextLetterIndex]), 100);
+      } else {
+        // Если дошли до конца алфавита, прокручиваем в самый низ
+        scrollViewport.scrollTo({
+          top: scrollViewport.scrollHeight,
+          behavior: 'smooth',
+        });
       }
     }
   };

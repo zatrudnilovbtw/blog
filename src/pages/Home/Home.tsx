@@ -31,7 +31,7 @@ export default  function Home  ()  {
         <div>
             <div className={styles.homePage}>
                 <h1 className={styles.title}>Ваш гид по биохакингу и добавкам</h1>
-                <h2 className={styles.subtitle}>Демистификация мира биохакинга. Откройте для себя четкие и эффективные техники для улучшения здоровья, производительности и повседневной жизни.</h2>
+                {/* <h2 className={styles.subtitle}>Демистификация мира биохакинга. Откройте для себя четкие и эффективные техники для улучшения здоровья, производительности и повседневной жизни.</h2> */}
                 <Link to="/guide">
                     <button className={styles.button}>Начать</button>
                 </Link>
