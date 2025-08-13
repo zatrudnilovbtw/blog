@@ -1,0 +1,10 @@
+.aboutPage{
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    height: 100vh; /* собственная область прокрутки для страницы */
+    overflow-y: auto;
+    padding: 0 16px 24px 16px; /* небольшой внутренний отступ и снизу */
+}
+
+

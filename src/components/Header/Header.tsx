@@ -52,6 +52,14 @@ export default function Header() {
           >
             <div className={styles.links}>Гайды</div>
           </NavLink>
+          <NavLink
+            to="/about"
+            className={({ isActive }) =>
+              isActive ? `${styles.link} ${styles.activeLink}` : styles.link
+            }
+          >
+            <div className={styles.links}>О нас</div>
+          </NavLink>
         </div>
         <div className={styles.right}>
           <SearchBar />

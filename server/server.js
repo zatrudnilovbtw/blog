@@ -80,6 +80,11 @@ const loadArticles = async () => {
       if (file.endsWith('.mdx')) {
         const filePath = path.join(articlesDir, file);
         const content = await fs.readFile(filePath, 'utf-8');
+        let lastModifiedIso = null;
+        try {
+          const stat = await fs.stat(filePath);
+          lastModifiedIso = new Date(stat.mtime).toISOString();
+        } catch (_) {}
         const { attributes } = frontMatter(content);
 
         if (!attributes.title || !attributes.category || !Array.isArray(attributes.tags)) {
@@ -93,6 +98,10 @@ const loadArticles = async () => {
           category: attributes.category,
           tags: attributes.tags,
           path: `/articles/${file.replace('.mdx', '')}`,
+          lastModified: lastModifiedIso,
+          aliases: Array.isArray(attributes.aliases)
+            ? attributes.aliases
+            : (attributes.aliases ? [attributes.aliases] : []),
         });
       }
     }
@@ -173,11 +182,13 @@ app.get('/api/search', async (req, res) => {
 
     const articles = await loadArticles();
     const filtered = articles
-      .filter(article =>
-        article.title.toLowerCase().includes(query) ||
-        article.category.toLowerCase().includes(query) ||
-        article.tags.some(tag => tag.toLowerCase().includes(query))
-      )
+      .filter(article => {
+        const inTitle = article.title.toLowerCase().includes(query);
+        const inCategory = article.category.toLowerCase().includes(query);
+        const inTags = article.tags.some(tag => tag.toLowerCase().includes(query));
+        const inAliases = (article.aliases || []).some(alias => String(alias).toLowerCase().includes(query));
+        return inTitle || inCategory || inTags || inAliases;
+      })
       .slice(0, limit);
 
     searchCache.set(cacheKey, filtered);

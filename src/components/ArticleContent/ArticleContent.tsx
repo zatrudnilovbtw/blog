@@ -11,7 +11,7 @@
  * Используется в: Guide.tsx
  */
 import { useParams } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkFrontmatter from 'remark-frontmatter';
 import remarkGfm from 'remark-gfm';
@@ -19,6 +19,8 @@ import rehypeHighlight from 'rehype-highlight';
 import 'highlight.js/styles/github.css'; // Стили для подсветки кода
 import styles from './ArticleContent.module.css';
 import { useArticle } from '../../utils/fileReader';
+import { useArticles } from '../../utils/fileReader';
+import { remarkAutoLinkTerms } from '../../utils/remarkAutoLinkTerms';
 import ButtonNext from '../../components/ButtonNext/ButtonNext';
 import ButtonPrev from '../../components/ButtonPrev/ButtonPrev';
 import CustomBar from '../../components/CustomBar/CustomBar';
@@ -31,6 +33,16 @@ interface RouteParams {
 const ArticleContent = () => {
   const { articleId } = useParams<keyof RouteParams>();
   const { article, loading, error, prevSlug, nextSlug } = useArticle(articleId);
+  const { articles: allArticles } = useArticles();
+
+  const autoLinkPlugin = useMemo(() => {
+    const terms = allArticles.flatMap((a: any) => {
+      const labels = [a.title, ...(Array.isArray(a.aliases) ? a.aliases : [])]
+        .filter(Boolean);
+      return labels.map((label: string) => ({ label, slug: a.slug || a.id }));
+    });
+    return remarkAutoLinkTerms(terms, { perTermLimit: 2 });
+  }, [allArticles]);
 
   useEffect(() => {
     const mainSection = document.querySelector('[class*="mainSection"]') as HTMLElement;
@@ -80,9 +92,14 @@ const ArticleContent = () => {
       <CustomBar />
       <div className={styles.content}>
         <ReactMarkdown
-          remarkPlugins={[remarkFrontmatter, remarkGfm]}
+          remarkPlugins={[remarkFrontmatter, remarkGfm, autoLinkPlugin]}
           rehypePlugins={[rehypeHighlight]}
           components={{
+            a: ({ children, href, ...props }) => (
+              <a href={href} target="_blank" rel="noopener noreferrer" {...props}>
+                {children}
+              </a>
+            ),
             h2: ({ children, ...props }) => {
               // Создаем стабильный ID на основе текста заголовка
               const text = Array.isArray(children) ? children.join('') : String(children);

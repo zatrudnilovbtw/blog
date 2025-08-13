@@ -21,6 +21,8 @@ export interface Article {
   id: string;
   tags: string[];
   path: string;
+  lastModified?: string;
+  aliases?: string[];
   [key: string]: any;
 }
 

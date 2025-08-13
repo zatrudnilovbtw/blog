@@ -31,9 +31,10 @@ const Navigation = ({ onLinkClick }: NavigationProps) => {
 
   const viewportRef = useRef<HTMLDivElement>(null);
 
-  const alphabet = Array.from({ length: 32 }, (_, i) => String.fromCharCode(0x0410 + i));
+  const russianAlphabet = Array.from({ length: 32 }, (_, i) => String.fromCharCode(0x0410 + i));
+  const latinAlphabet = Array.from({ length: 26 }, (_, i) => String.fromCharCode(0x41 + i));
 
-  const scrollToLetter = (letter: string) => {
+  const scrollToLetter = (letter: string, alphabetSource: string[]) => {
     const scrollViewport = viewportRef.current;
     if (!scrollViewport) return;
 
@@ -48,10 +49,10 @@ const Navigation = ({ onLinkClick }: NavigationProps) => {
       });
     } else {
       // Исправляем: добавляем проверку чтобы избежать бесконечной рекурсии
-      const nextLetterIndex = alphabet.indexOf(letter) + 1;
-      if (nextLetterIndex < alphabet.length) {
+      const nextLetterIndex = alphabetSource.indexOf(letter) + 1;
+      if (nextLetterIndex < alphabetSource.length) {
         // Добавляем небольшую задержку чтобы избежать проблем с прокруткой
-        setTimeout(() => scrollToLetter(alphabet[nextLetterIndex]), 100);
+        setTimeout(() => scrollToLetter(alphabetSource[nextLetterIndex], alphabetSource), 100);
       } else {
         // Если дошли до конца алфавита, прокручиваем в самый низ
         scrollViewport.scrollTo({
@@ -75,16 +76,29 @@ const Navigation = ({ onLinkClick }: NavigationProps) => {
   return (
     <div className={styles.navigation}>
       {/* Алфавитная навигация слева */}
-      <div className={styles.alphabetNav}>
-        {alphabet.map((letter) => (
-          <button
-            key={letter}
-            className={styles.alphabetButton}
-            onClick={() => scrollToLetter(letter)}
-          >
-            {letter}
-          </button>
-        ))}
+      <div className={styles.alphabetColumn}>
+        <div className={styles.alphabetBlock}>
+          {russianAlphabet.map((letter) => (
+            <button
+              key={letter}
+              className={styles.alphabetButton}
+              onClick={() => scrollToLetter(letter, russianAlphabet)}
+            >
+              {letter}
+            </button>
+          ))}
+        </div>
+        <div className={styles.alphabetBlock}>
+          {latinAlphabet.map((letter) => (
+            <button
+              key={letter}
+              className={styles.alphabetButton}
+              onClick={() => scrollToLetter(letter, latinAlphabet)}
+            >
+              {letter}
+            </button>
+          ))}
+        </div>
       </div>
 
       <ScrollArea.Root className={styles.scrollRoot}>

@@ -10,8 +10,10 @@
  */
 import { BrowserRouter, Route, Routes } from "react-router-dom"
 import Guide from "./pages/Guide/Guide"
+import NotFound from "./pages/NotFound/NotFound"
 import Home from "./pages/Home/Home"
 import Header from "./components/Header/Header"
+import About from "./pages/About/About"
 
 function App() {
   return (
@@ -21,8 +23,10 @@ function App() {
         <main className="main-content">
           <Routes>
             <Route path="/" element={<Home/>}/>
+            <Route path="/about" element={<About/>} />
             <Route path="guide" element={<Guide/>} />
             <Route path="/guide/:articleId" element={<Guide />} />
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </main>
       </div>
