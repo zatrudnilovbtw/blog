@@ -50,17 +50,29 @@ export default function BurgerMenu({ isOpen, onToggle, width = '300px' }: Burger
         </button>
       </div>
       <div className={styles.contentSection}>
-        <NavLink 
-          to="/guide" 
-          className={({ isActive }) => `${styles.guideLink} ${isActive ? styles.activeLink : ''}`} 
-          onClick={handleLinkClick}
-        >
-          <div className={styles.linkWrapper}>
-            Guides
-          </div>
-        </NavLink>
+        <div className={styles.quickLinksRow}>
+          <NavLink 
+            to="/guide" 
+            className={({ isActive }) => `${styles.guideLink} ${isActive ? styles.activeLink : ''}`} 
+            onClick={handleLinkClick}
+          >
+            <div className={styles.linkWrapper}>
+              Гайды
+            </div>
+          </NavLink>
+          <NavLink 
+            to="/about" 
+            className={({ isActive }) => `${styles.guideLink} ${isActive ? styles.activeLink : ''}`} 
+            onClick={handleLinkClick}
+          >
+            <div className={styles.linkWrapper}>
+              О нас
+            </div>
+          </NavLink>
+        </div>
         {!isHome && <Navigation onLinkClick={handleLinkClick} />}
       </div>
+      
     </div>
   
     {isOpen && <div className={styles.overlay} onClick={onToggle}></div>}

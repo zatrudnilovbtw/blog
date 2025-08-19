@@ -41,8 +41,8 @@ const ArticleContent = () => {
         .filter(Boolean);
       return labels.map((label: string) => ({ label, slug: a.slug || a.id }));
     });
-    return remarkAutoLinkTerms(terms, { perTermLimit: 2 });
-  }, [allArticles]);
+    return remarkAutoLinkTerms(terms, { perTermLimit: 2, currentSlug: articleId });
+  }, [allArticles, articleId]);
 
   useEffect(() => {
     const mainSection = document.querySelector('[class*="mainSection"]') as HTMLElement;
@@ -95,11 +95,18 @@ const ArticleContent = () => {
           remarkPlugins={[remarkFrontmatter, remarkGfm, autoLinkPlugin]}
           rehypePlugins={[rehypeHighlight]}
           components={{
-            a: ({ children, href, ...props }) => (
-              <a href={href} target="_blank" rel="noopener noreferrer" {...props}>
-                {children}
-              </a>
-            ),
+            a: ({ children, href = '', ...props }) => {
+              const isExternal = /^https?:/i.test(href) || /^mailto:/i.test(href);
+              return (
+                <a
+                  href={href}
+                  {...(isExternal ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                  {...props}
+                >
+                  {children}
+                </a>
+              );
+            },
             h2: ({ children, ...props }) => {
               // Создаем стабильный ID на основе текста заголовка
               const text = Array.isArray(children) ? children.join('') : String(children);

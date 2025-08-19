@@ -33,6 +33,7 @@ const Navigation = ({ onLinkClick }: NavigationProps) => {
 
   const russianAlphabet = Array.from({ length: 32 }, (_, i) => String.fromCharCode(0x0410 + i));
   const latinAlphabet = Array.from({ length: 26 }, (_, i) => String.fromCharCode(0x41 + i));
+  const numbersAlphabet = Array.from({ length: 10 }, (_, i) => i.toString());
 
   const scrollToLetter = (letter: string, alphabetSource: string[]) => {
     const scrollViewport = viewportRef.current;
@@ -94,6 +95,18 @@ const Navigation = ({ onLinkClick }: NavigationProps) => {
               key={letter}
               className={styles.alphabetButton}
               onClick={() => scrollToLetter(letter, latinAlphabet)}
+            >
+              {letter}
+            </button>
+          ))}
+        </div>
+        <div className={styles.alphabetBlock}>
+          {numbersAlphabet.map((letter) => (
+            <button
+              key={letter}
+              className={styles.alphabetButton}
+              data-type="digit"
+              onClick={() => scrollToLetter(letter, numbersAlphabet)}
             >
               {letter}
             </button>

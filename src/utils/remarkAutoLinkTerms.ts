@@ -5,6 +5,7 @@ export interface AutoLinkTerm {
 
 export interface AutoLinkOptions {
   perTermLimit?: number;
+  currentSlug?: string;
 }
 
 function escapeRegex(input: string): string {
@@ -13,6 +14,7 @@ function escapeRegex(input: string): string {
 
 export function remarkAutoLinkTerms(terms: AutoLinkTerm[], options: AutoLinkOptions = {}) {
   const perTermLimit = options.perTermLimit ?? 2;
+  const currentSlug = options.currentSlug?.trim() || undefined;
 
   const normalized: Record<string, string> = Object.create(null);
   for (const t of terms) {
@@ -65,13 +67,18 @@ export function remarkAutoLinkTerms(terms: AutoLinkTerm[], options: AutoLinkOpti
             const used = counts[key] || 0;
 
             if (slug && used < perTermLimit) {
-              counts[key] = used + 1;
-              newChildren.push({
-                type: 'link',
-                url: `/guide/${slug}`,
-                title: null,
-                children: [{ type: 'text', value: matchedText }],
-              });
+              // Не создаем ссылку, если ссылка ведет на текущую статью
+              if (currentSlug && slug === currentSlug) {
+                newChildren.push({ type: 'text', value: matchedText });
+              } else {
+                counts[key] = used + 1;
+                newChildren.push({
+                  type: 'link',
+                  url: `/guide/${slug}`,
+                  title: null,
+                  children: [{ type: 'text', value: matchedText }],
+                });
+              }
             } else {
               newChildren.push({ type: 'text', value: matchedText });
             }

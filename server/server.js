@@ -168,10 +168,10 @@ app.get('/api/articles/:slug', async (req, res) => {
 
 // API для поиска статей
 app.get('/api/search', async (req, res) => {
-  const query = req.query.q?.toLowerCase() || '';
+  const rawQuery = String(req.query.q || '').trim();
   const limit = parseInt(req.query.limit) || 5;
-  const cacheKey = `search:${query}:${limit}`;
-  console.log(`Поисковый запрос: q=${query}, limit=${limit}`);
+  const cacheKey = `search:${rawQuery}:${limit}`;
+  console.log(`Поисковый запрос: q=${rawQuery}, limit=${limit}`);
 
   try {
     const cached = searchCache.get(cacheKey);
@@ -181,18 +181,57 @@ app.get('/api/search', async (req, res) => {
     }
 
     const articles = await loadArticles();
-    const filtered = articles
-      .filter(article => {
-        const inTitle = article.title.toLowerCase().includes(query);
-        const inCategory = article.category.toLowerCase().includes(query);
-        const inTags = article.tags.some(tag => tag.toLowerCase().includes(query));
-        const inAliases = (article.aliases || []).some(alias => String(alias).toLowerCase().includes(query));
-        return inTitle || inCategory || inTags || inAliases;
-      })
-      .slice(0, limit);
+    
+    // Нормализация для устойчивого поиска (регистр, дефисы, диакритика, ё→е)
+    const normalize = (s = '') => String(s)
+      .toLowerCase()
+      .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+      .replace(/ё/g, 'е')
+      .replace(/[\-_/.,]+/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
 
-    searchCache.set(cacheKey, filtered);
-    res.json(filtered);
+    const q = normalize(rawQuery);
+    const tokens = q.length ? q.split(' ') : [];
+
+    const scoreArticle = (a) => {
+      const title = normalize(a.title);
+      const category = normalize(a.category);
+      const tags = (a.tags || []).map(normalize).join(' ');
+      const aliases = (a.aliases || []).map(normalize).join(' ');
+      const id = normalize(a.id);
+
+      const haystackAll = [title, category, tags, aliases, id].join(' ');
+      if (!tokens.length) return 0;
+
+      let score = 0;
+      for (const t of tokens) {
+        const inTitle = title.includes(t);
+        const inAliases = aliases.includes(t);
+        const inTags = tags.includes(t);
+        const inCategory = category.includes(t);
+        const inId = id.includes(t);
+        if (inTitle) score += 3;
+        if (inAliases) score += 3;
+        if (inTags) score += 1;
+        if (inCategory) score += 1;
+        if (inId) score += 1;
+      }
+
+      // Бонус за полное совпадение любой из строк
+      if (haystackAll.includes(q)) score += 2;
+      return score;
+    };
+
+    const scored = articles
+      .map(a => ({ a, score: scoreArticle(a) }))
+      .filter(x => x.score > 0)
+      .sort((x, y) => y.score - x.score)
+      .slice(0, limit)
+      .map(x => x.a);
+
+    searchCache.set(cacheKey, scored);
+    res.json(scored);
 
   } catch (error) {
     console.error('Ошибка поиска:', error.message);

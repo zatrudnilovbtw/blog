@@ -136,7 +136,7 @@
     margin-top: 5px;
     line-height: 1.5;
     width: 100%;
-    padding-bottom: 2rem;
+    padding-bottom: 3rem; /* чуть больше места снизу на мобилках */
   }
 
   .content h1 {
@@ -149,6 +149,8 @@
     font-size: 24px;
     line-height: 1.4;
     word-break: break-word;
+    margin: 1.5rem 0 0.75rem; /* поднимаем заголовки ближе на мобилках */
+    padding-top: 1rem; /* уменьшаем внутренний верхний отступ */
   }
 
   .content p {

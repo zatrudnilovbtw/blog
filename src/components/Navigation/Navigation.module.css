@@ -17,9 +17,7 @@
   overflow-y: auto;
 }
 
-.alphabetBlock {
-  /* Блоки без ограничений высоты; скролл у общей колонны */
-}
+
 
 .alphabetButton {
   width: 30px;
@@ -32,6 +30,12 @@
   color: #333;
   transition: color 0.2s;
   margin-bottom: 5px;
+}
+
+/* Чуть крупнее цифры в колонке алфавита */
+.alphabetButton[data-type="digit"] {
+  font-size: 14px;
+  
 }
 
 .alphabetButton:last-child {
